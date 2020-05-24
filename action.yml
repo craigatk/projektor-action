@@ -1,0 +1,22 @@
+name: 'Projektor'
+description: 'Publish test results to Projektor for easy viewing'
+inputs:
+  config-file:
+    description: 'Path to Projektor config file'
+    default: 'projektor.json'
+    required: false
+  server-url:
+    description: 'Projektor server URL to publish results to'
+    required: false
+  results:
+    description: 'Paths to the test results XML files'
+    required: false
+  attachments:
+    description: 'Paths to the files to attach to the test report'
+    required: false
+outputs:
+  report-url:
+    description: 'Link to Projektor test report'
+runs:
+  using: 'node12'
+  main: 'index.js'

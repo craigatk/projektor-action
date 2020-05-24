@@ -1,0 +1,21 @@
+{
+  "name": "projektor-github-action",
+  "version": "0.0.1",
+  "description": "GitHub action for publishing test results to Projektor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/craigatk/projektor.git"
+  },
+  "author": "Craig Atkinson",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "1.2.4",
+    "@actions/github": "2.2.0",
+    "projektor-publish": "2.2.1"
+  }
+}
