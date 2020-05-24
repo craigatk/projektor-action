@@ -4,7 +4,9 @@
   "description": "GitHub action for publishing test results to Projektor",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build index.js",
+    "format": "prettier --write *.js"
   },
   "keywords": [],
   "repository": {
@@ -19,6 +21,7 @@
     "projektor-publish": "2.2.1"
   },
   "devDependencies": {
-    "@zeit/ncc": "0.22.3"
+    "@zeit/ncc": "0.22.3",
+    "prettier": "2.0.5"
   }
 }
