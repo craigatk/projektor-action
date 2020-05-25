@@ -14,6 +14,9 @@ inputs:
   attachments:
     description: 'Paths to the files to attach to the test report'
     required: false
+  token:
+    description: 'Token for publishing results to Projektor server if server has token enabled'
+    required: false
 outputs:
   report-url:
     description: 'Link to Projektor test report'
