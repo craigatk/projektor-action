@@ -23,7 +23,19 @@
   "devDependencies": {
     "@zeit/ncc": "0.22.3",
     "jest": "26.0.1",
+    "jest-junit": "10.0.0",
     "mock-http-server": "1.4.2",
     "prettier": "2.0.5"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
+  },
+  "jest-junit": {
+    "outputDirectory": "test-results",
+    "includeConsoleOutput": "true"
   }
 }
