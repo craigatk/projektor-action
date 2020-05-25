@@ -18,9 +18,9 @@ jobs:
           npm install
           npm run-script test
 
-#      - name: Projektor publish
-#        uses: craigatk/projektor-action@v3
-#        with:
-#          server-url: https://projektorlive.herokuapp.com
-#          results: test-results/*.xml
-#          token: ${{ secrets.PROJEKTOR_TOKEN }}
+      - name: Projektor publish
+        uses: craigatk/projektor-action@v3
+        with:
+          server-url: https://projektorlive.herokuapp.com
+          results: test-results/*.xml
+          token: ${{ secrets.PROJEKTOR_TOKEN }}
