@@ -1,5 +1,6 @@
 const ServerMock = require("mock-http-server");
 const { collectAndPublishResults } = require("../../index");
+const waitForExpect = require("wait-for-expect");
 
 describe("publishing results to server", () => {
   const server = new ServerMock({ host: "localhost", port: 9002 });
@@ -18,16 +19,30 @@ describe("publishing results to server", () => {
     server.stop(done);
   });
 
-  it("should publish results from multiple directories", async () => {
+  const expectResultsPost = (testId) => {
     server.on({
       method: "POST",
       path: "/results",
       reply: {
         status: 200,
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ uri: "/tests/12345", id: "12345" }),
+        body: JSON.stringify({ uri: `/tests/${testId}`, id: testId }),
       },
     });
+  };
+
+  const expectAttachmentPost = (testId, attachmentFileName) => {
+    server.on({
+      method: "POST",
+      path: `/run/${testId}/attachments/${attachmentFileName}`,
+      reply: {
+        status: 200,
+      },
+    });
+  };
+
+  it("should publish results from multiple directories", async () => {
+    expectResultsPost("12345");
 
     const resultsInput =
       "src/__tests__/resultsDir1/*.xml\r\nsrc/__tests__/resultsDir2/*.xml";
@@ -48,15 +63,7 @@ describe("publishing results to server", () => {
   });
 
   it("should include token in call to Projektor server", async () => {
-    server.on({
-      method: "POST",
-      path: "/results",
-      reply: {
-        status: 200,
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ uri: "/tests/12345", id: "12345" }),
-      },
-    });
+    expectResultsPost("12345");
 
     const resultsInput =
       "src/__tests__/resultsDir1/*.xml\r\nsrc/__tests__/resultsDir2/*.xml";
@@ -70,5 +77,68 @@ describe("publishing results to server", () => {
     expect(requests.length).toBe(1);
 
     expect(requests[0].headers["x-projektor-token"]).toEqual("my-token");
+  });
+
+  it("should publish attachments from one attachments directory", async () => {
+    expectResultsPost("12345");
+
+    expectAttachmentPost("12345", "attachment1.txt");
+    expectAttachmentPost("12345", "attachment2.txt");
+
+    const resultsInput =
+      "src/__tests__/resultsDir1/*.xml\r\nsrc/__tests__/resultsDir2/*.xml";
+    const serverUrl = "http://localhost:9002";
+    const attachmentsInput = "src/__tests__/attachmentsDir1/*.txt";
+
+    await collectAndPublishResults({
+      resultsInput,
+      serverUrl,
+      attachmentsInput,
+    });
+
+    await waitForExpect(() => {
+      const requests = server.requests();
+
+      expect(requests.length).toBe(3);
+
+      const requestUrls = requests.map((req) => req.url);
+
+      expect(requestUrls).toContain("/run/12345/attachments/attachment1.txt");
+      expect(requestUrls).toContain("/run/12345/attachments/attachment2.txt");
+    });
+  });
+
+  it("should publish attachments from multiple attachments directories", async () => {
+    expectResultsPost("12345");
+
+    expectAttachmentPost("12345", "attachment1.txt");
+    expectAttachmentPost("12345", "attachment2.txt");
+    expectAttachmentPost("12345", "attachment3.txt");
+    expectAttachmentPost("12345", "attachment4.txt");
+
+    const resultsInput =
+      "src/__tests__/resultsDir1/*.xml\r\nsrc/__tests__/resultsDir2/*.xml";
+    const serverUrl = "http://localhost:9002";
+    const attachmentsInput =
+      "src/__tests__/attachmentsDir1/*.txt\r\nsrc/__tests__/attachmentsDir2/*.txt";
+
+    await collectAndPublishResults({
+      resultsInput,
+      serverUrl,
+      attachmentsInput,
+    });
+
+    await waitForExpect(() => {
+      const requests = server.requests();
+
+      expect(requests.length).toBe(5);
+
+      const requestUrls = requests.map((req) => req.url);
+
+      expect(requestUrls).toContain("/run/12345/attachments/attachment1.txt");
+      expect(requestUrls).toContain("/run/12345/attachments/attachment2.txt");
+      expect(requestUrls).toContain("/run/12345/attachments/attachment3.txt");
+      expect(requestUrls).toContain("/run/12345/attachments/attachment4.txt");
+    });
   });
 });

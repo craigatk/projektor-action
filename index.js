@@ -9,7 +9,7 @@ const collectAndPublishResults = async ({
   token,
 }) => {
   const results = resultsInput ? resultsInput.split(/\r?\n/) : null;
-  const attachments = attachmentsInput ? resultsInput.split(/\r?\n/) : null;
+  const attachments = attachmentsInput ? attachmentsInput.split(/\r?\n/) : null;
 
   const args = {};
 
