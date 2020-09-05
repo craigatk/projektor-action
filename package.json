@@ -1,6 +1,6 @@
 {
   "name": "projektor-github-action",
-  "version": "0.0.1",
+  "version": "1.0.3",
   "description": "GitHub action for publishing test results to Projektor",
   "main": "index.js",
   "scripts": {
@@ -18,21 +18,23 @@
   "dependencies": {
     "@actions/core": "1.2.4",
     "@actions/github": "2.2.0",
-    "projektor-publish": "2.2.2"
+    "projektor-publish": "2.5.0"
   },
   "devDependencies": {
     "@zeit/ncc": "0.22.3",
     "jest": "26.0.1",
     "jest-junit": "10.0.0",
     "mock-http-server": "1.4.2",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "wait-for-expect": "3.0.2"
   },
   "jest": {
     "testEnvironment": "node",
     "reporters": [
       "default",
       "jest-junit"
-    ]
+    ],
+    "collectCoverage": true
   },
   "jest-junit": {
     "outputDirectory": "test-results",
