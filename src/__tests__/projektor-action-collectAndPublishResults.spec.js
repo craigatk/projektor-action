@@ -1,5 +1,5 @@
 const ServerMock = require("mock-http-server");
-const { collectAndPublishResults } = require("../../index");
+const { collectAndPublishResults } = require("../../projektor-action");
 const waitForExpect = require("wait-for-expect");
 
 describe("publishing results to server", () => {
