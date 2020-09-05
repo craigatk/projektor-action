@@ -17,6 +17,9 @@ inputs:
   token:
     description: 'Token for publishing results to Projektor server if server has token enabled'
     required: false
+  print-link:
+    description: 'Set to "true" to log report URL from previously-created report for easy access'
+    required: false
 outputs:
   report-url:
     description: 'Link to Projektor test report'
