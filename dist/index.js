@@ -5954,17 +5954,28 @@ module.exports = function parseHeaders(headers) {
 
 const fs = __webpack_require__(747);
 
+const defaultResultsFileName = "projektor_report.json";
+
 function writeResultsFileToDisk(publicId, reportUrl, resultsFileName) {
   const resultsFileJson = {
     id: publicId,
-    reportUrl,
+    report_url: reportUrl,
   };
 
   fs.writeFileSync(resultsFileName, JSON.stringify(resultsFileJson));
 }
 
+function readResultsFileFromDisk(resultsFileName) {
+  const resultsFileContents = fs.readFileSync(resultsFileName).toString();
+  const results = JSON.parse(resultsFileContents);
+
+  return { id: results.id, reportUrl: results.report_url };
+}
+
 module.exports = {
   writeResultsFileToDisk,
+  readResultsFileFromDisk,
+  defaultResultsFileName,
 };
 
 
@@ -6696,12 +6707,15 @@ async function run(args, publishToken, defaultConfigFilePath) {
 
 function printLinkFromFile(resultsFileName) {
   const fs = __webpack_require__(747);
+  const {
+    defaultResultsFileName,
+    readResultsFileFromDisk,
+  } = __webpack_require__(637);
 
-  const fileName = resultsFileName || "projektor_report.json";
+  const fileName = resultsFileName || defaultResultsFileName;
 
   if (fs.existsSync(fileName)) {
-    const resultsFileContents = fs.readFileSync(fileName);
-    const results = JSON.parse(resultsFileContents);
+    const results = readResultsFileFromDisk(fileName);
 
     console.log(`View Projektor results at ${results.reportUrl}`);
 
