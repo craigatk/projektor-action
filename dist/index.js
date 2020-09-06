@@ -2065,67 +2065,11 @@ function regExpEscape (s) {
 /***/ }),
 
 /***/ 104:
-/***/ (function(module, __unusedexports, __webpack_require__) {
+/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
-const core = __webpack_require__(470);
-const { run } = __webpack_require__(930);
+const { executeAction } = __webpack_require__(707);
 
-const collectAndPublishResults = async ({
-  configFilePath,
-  serverUrl,
-  resultsInput,
-  attachmentsInput,
-  token,
-}) => {
-  const results = resultsInput ? resultsInput.split(/\r?\n/) : null;
-  const attachments = attachmentsInput ? resultsInput.split(/\r?\n/) : null;
-
-  const args = {};
-
-  if (configFilePath) {
-    args.configFile = configFilePath;
-  }
-
-  if (serverUrl) {
-    args.serverUrl = serverUrl;
-  }
-
-  if (results) {
-    args.resultsFileGlobs = results;
-  }
-
-  if (attachments) {
-    args.attachments = attachments;
-  }
-
-  const { reportUrl } = await run(args, token, "projektor.json");
-
-  return { reportUrl };
-};
-
-try {
-  const configFilePath = core.getInput("config-file");
-  const serverUrl = core.getInput("server-url");
-  const resultsInput = core.getInput("results");
-  const attachmentsInput = core.getInput("attachments");
-  const token = core.getInput("token");
-
-  const { reportUrl } = collectAndPublishResults({
-    configFilePath,
-    serverUrl,
-    resultsInput,
-    attachmentsInput,
-    token,
-  });
-
-  core.setOutput("report-url", reportUrl);
-} catch (error) {
-  core.setFailed(error.message);
-}
-
-module.exports = {
-  collectAndPublishResults,
-};
+executeAction();
 
 
 /***/ }),
@@ -4117,7 +4061,7 @@ module.exports = require("assert");
 /***/ 361:
 /***/ (function(module) {
 
-module.exports = {"_args":[["axios@0.19.2","C:\\Users\\atkcr\\projects\\projektor-action"]],"_from":"axios@0.19.2","_id":"axios@0.19.2","_inBundle":false,"_integrity":"sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.19.2","name":"axios","escapedName":"axios","rawSpec":"0.19.2","saveSpec":null,"fetchSpec":"0.19.2"},"_requiredBy":["/projektor-publish"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.19.2.tgz","_spec":"0.19.2","_where":"C:\\Users\\atkcr\\projects\\projektor-action","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"1.5.10"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"homepage":"https://github.com/axios/axios","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test && bundlesize","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","version":"0.19.2"};
+module.exports = {"_from":"axios@0.19.2","_id":"axios@0.19.2","_inBundle":false,"_integrity":"sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.19.2","name":"axios","escapedName":"axios","rawSpec":"0.19.2","saveSpec":null,"fetchSpec":"0.19.2"},"_requiredBy":["/projektor-publish"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.19.2.tgz","_shasum":"3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27","_spec":"axios@0.19.2","_where":"C:\\Users\\atkcr\\projects\\projektor-action\\node_modules\\projektor-publish","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"1.5.10"},"deprecated":false,"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"homepage":"https://github.com/axios/axios","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test && bundlesize","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","version":"0.19.2"};
 
 /***/ }),
 
@@ -6005,6 +5949,27 @@ module.exports = function parseHeaders(headers) {
 
 /***/ }),
 
+/***/ 637:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const fs = __webpack_require__(747);
+
+function writeResultsFileToDisk(publicId, reportUrl, resultsFileName) {
+  const resultsFileJson = {
+    id: publicId,
+    reportUrl,
+  };
+
+  fs.writeFileSync(resultsFileName, JSON.stringify(resultsFileJson));
+}
+
+module.exports = {
+  writeResultsFileToDisk,
+};
+
+
+/***/ }),
+
 /***/ 669:
 /***/ (function(module) {
 
@@ -6480,6 +6445,124 @@ try {
 
 /***/ }),
 
+/***/ 698:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+function writeSlackMessageFileToDisk(
+  reportUrl,
+  slackMessageFileName,
+  projectName
+) {
+  const fs = __webpack_require__(747);
+
+  const messageJson = createSlackMessageJson(reportUrl, projectName);
+
+  fs.writeFileSync(slackMessageFileName, messageJson);
+}
+
+function createSlackMessageJson(reportUrl, projectName, currentTimestamp) {
+  const message = {
+    attachments: [
+      {
+        fallback: "Projektor test report",
+        color: "#FF0000",
+        pretext: `Tests failed in project ${projectName || ""}`,
+        title: "Projektor test report",
+        title_link: reportUrl,
+        text: "See the Projektor test report for details on the failing tests",
+        footer: "Projektor",
+        ts: currentTimestamp || new Date().getTime(),
+      },
+    ],
+  };
+
+  return JSON.stringify(message);
+}
+
+module.exports = {
+  writeSlackMessageFileToDisk,
+  createSlackMessageJson,
+};
+
+
+/***/ }),
+
+/***/ 707:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const core = __webpack_require__(470);
+const { run, printLinkFromFile } = __webpack_require__(930);
+
+const collectAndPublishResults = async ({
+  configFilePath,
+  serverUrl,
+  resultsInput,
+  attachmentsInput,
+  token,
+}) => {
+  const results = resultsInput ? resultsInput.split(/\r?\n/) : null;
+  const attachments = attachmentsInput ? attachmentsInput.split(/\r?\n/) : null;
+
+  const args = {};
+
+  if (configFilePath) {
+    args.configFile = configFilePath;
+  }
+
+  if (serverUrl) {
+    args.serverUrl = serverUrl;
+  }
+
+  if (results) {
+    args.resultsFileGlobs = results;
+  }
+
+  if (attachments) {
+    args.attachments = attachments;
+  }
+
+  const { reportUrl } = await run(args, token, "projektor.json");
+
+  return { reportUrl };
+};
+
+const executeAction = () => {
+  try {
+    const printLink = core.getInput("print-link");
+
+    if (printLink === "true") {
+      const reportUrl = printLinkFromFile();
+      core.setOutput("report-url", reportUrl);
+    } else {
+      const configFilePath = core.getInput("config-file");
+      const serverUrl = core.getInput("server-url");
+      const resultsInput = core.getInput("results");
+      const attachmentsInput = core.getInput("attachments");
+      const token = core.getInput("token");
+
+      const { reportUrl } = collectAndPublishResults({
+        configFilePath,
+        serverUrl,
+        resultsInput,
+        attachmentsInput,
+        token,
+      });
+
+      core.setOutput("report-url", reportUrl);
+    }
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+};
+
+module.exports = {
+  collectAndPublishResults,
+  executeAction,
+};
+
+
+/***/ }),
+
 /***/ 727:
 /***/ (function(module) {
 
@@ -6528,11 +6611,16 @@ async function runCLI(cliArgs, publishToken, defaultConfigFilePath) {
 async function run(args, publishToken, defaultConfigFilePath) {
   const fs = __webpack_require__(747);
   const { collectAndSendResults } = __webpack_require__(83);
+  const { writeSlackMessageFileToDisk } = __webpack_require__(698);
+  const { writeResultsFileToDisk } = __webpack_require__(637);
 
   let serverUrl;
   let resultsFileGlobs;
   let attachmentFileGlobs;
   let exitWithFailure;
+  let writeSlackMessageFile;
+  let slackMessageFileName;
+  let projectName;
 
   const configFilePath = args.configFile || defaultConfigFilePath;
 
@@ -6544,14 +6632,22 @@ async function run(args, publishToken, defaultConfigFilePath) {
     resultsFileGlobs = config.results;
     attachmentFileGlobs = config.attachments;
     exitWithFailure = config.exitWithFailure;
+    writeSlackMessageFile = config.writeSlackMessageFile;
+    slackMessageFileName = config.slackMessageFileName;
+    projectName = config.projectName;
   } else {
     serverUrl = args.serverUrl;
     resultsFileGlobs = args.resultsFileGlobs;
 
     if (args.attachments) {
-      attachmentFileGlobs = [args.attachments];
+      attachmentFileGlobs = Array.isArray(args.attachments)
+        ? args.attachments
+        : [args.attachments];
     }
     exitWithFailure = args.exitWithFailure;
+    writeSlackMessageFile = args.writeSlackMessageFile;
+    slackMessageFileName = args.slackMessageFileName;
+    projectName = args.projectName;
   }
 
   if (resultsFileGlobs) {
@@ -6561,6 +6657,25 @@ async function run(args, publishToken, defaultConfigFilePath) {
       resultsFileGlobs,
       attachmentFileGlobs
     );
+
+    if (!resultsBlob) {
+      console.log(
+        `No test results files found in locations ${resultsFileGlobs}`
+      );
+    }
+
+    const writeResultsFile = process.env.CI && process.env.CI !== "false";
+    if (writeResultsFile) {
+      writeResultsFileToDisk(publicId, reportUrl, "projektor_report.json");
+    }
+
+    if (writeSlackMessageFile) {
+      writeSlackMessageFileToDisk(
+        reportUrl,
+        slackMessageFileName || "projektor_failure_message.json",
+        projectName
+      );
+    }
 
     if (exitWithFailure && containsTestFailure(resultsBlob)) {
       console.log(
@@ -6579,6 +6694,24 @@ async function run(args, publishToken, defaultConfigFilePath) {
   }
 }
 
+function printLinkFromFile(resultsFileName) {
+  const fs = __webpack_require__(747);
+
+  const fileName = resultsFileName || "projektor_report.json";
+
+  if (fs.existsSync(fileName)) {
+    const resultsFileContents = fs.readFileSync(fileName);
+    const results = JSON.parse(resultsFileContents);
+
+    console.log(`View Projektor results at ${results.reportUrl}`);
+
+    return results.reportUrl;
+  } else {
+    console.log(`No Projektor results file found with name ${fileName}`);
+    return null;
+  }
+}
+
 function containsTestFailure(resultsBlob) {
   return resultsBlob.indexOf("<failure") != -1;
 }
@@ -6586,6 +6719,7 @@ function containsTestFailure(resultsBlob) {
 module.exports = {
   runCLI,
   run,
+  printLinkFromFile,
 };
 
 
