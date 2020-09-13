@@ -19,8 +19,9 @@ jobs:
           npm run-script test
 
       - name: Projektor publish
-        uses: craigatk/projektor-action@v7
+        uses: craigatk/projektor-action@v8
         with:
           server-url: https://projektorlive.herokuapp.com
           results: test-results/*.xml
+          coverage: coverage/*.xml
           token: ${{ secrets.PROJEKTOR_TOKEN }}
