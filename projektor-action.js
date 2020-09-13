@@ -6,10 +6,12 @@ const collectAndPublishResults = async ({
   serverUrl,
   resultsInput,
   attachmentsInput,
+  coverageInput,
   token,
 }) => {
   const results = resultsInput ? resultsInput.split(/\r?\n/) : null;
   const attachments = attachmentsInput ? attachmentsInput.split(/\r?\n/) : null;
+  const coverage = coverageInput ? coverageInput.split(/\r?\n/) : null;
 
   const args = {};
 
@@ -29,6 +31,10 @@ const collectAndPublishResults = async ({
     args.attachments = attachments;
   }
 
+  if (coverage) {
+    args.coverage = coverage;
+  }
+
   const { reportUrl } = await run(args, token, "projektor.json");
 
   return { reportUrl };
@@ -46,6 +52,7 @@ const executeAction = () => {
       const serverUrl = core.getInput("server-url");
       const resultsInput = core.getInput("results");
       const attachmentsInput = core.getInput("attachments");
+      const coverageInput = core.getInput("coverage");
       const token = core.getInput("token");
 
       const { reportUrl } = collectAndPublishResults({
@@ -53,6 +60,7 @@ const executeAction = () => {
         serverUrl,
         resultsInput,
         attachmentsInput,
+        coverageInput,
         token,
       });
 

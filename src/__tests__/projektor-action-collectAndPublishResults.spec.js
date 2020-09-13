@@ -22,7 +22,7 @@ describe("publishing results to server", () => {
   const expectResultsPost = (testId) => {
     server.on({
       method: "POST",
-      path: "/results",
+      path: "/groupedResults",
       reply: {
         status: 200,
         headers: { "content-type": "application/json" },
@@ -35,6 +35,16 @@ describe("publishing results to server", () => {
     server.on({
       method: "POST",
       path: `/run/${testId}/attachments/${attachmentFileName}`,
+      reply: {
+        status: 200,
+      },
+    });
+  };
+
+  const expectCoveragePost = (testId) => {
+    server.on({
+      method: "POST",
+      path: `/run/${testId}/coverage`,
       reply: {
         status: 200,
       },
@@ -139,6 +149,34 @@ describe("publishing results to server", () => {
       expect(requestUrls).toContain("/run/12345/attachments/attachment2.txt");
       expect(requestUrls).toContain("/run/12345/attachments/attachment3.txt");
       expect(requestUrls).toContain("/run/12345/attachments/attachment4.txt");
+    });
+  });
+
+  it("should publish coverage from one coverage directory", async () => {
+    expectResultsPost("12345");
+
+    expectCoveragePost("12345");
+
+    const resultsInput =
+      "src/__tests__/resultsDir1/*.xml\r\nsrc/__tests__/resultsDir2/*.xml";
+    const serverUrl = "http://localhost:9002";
+    const coverageInput = "src/__tests__/coverageDir/*.xml";
+
+    await collectAndPublishResults({
+      resultsInput,
+      serverUrl,
+      coverageInput,
+    });
+
+    await waitForExpect(() => {
+      const requests = server.requests();
+
+      expect(requests.length).toBe(2);
+
+      const requestUrls = requests.map((req) => req.url);
+
+      expect(requestUrls).toContain("/groupedResults");
+      expect(requestUrls).toContain("/run/12345/coverage");
     });
   });
 });

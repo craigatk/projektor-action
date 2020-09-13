@@ -986,19 +986,24 @@ const collectResults = (resultsFileGlobs) => {
   return resultsBlob;
 };
 
-const collectAttachments = (attachmentFileGlobs) => {
-  const attachmentFilePaths = globsToFilePaths(attachmentFileGlobs);
+const collectFileContents = (fileGlobs) => {
+  const filePaths = globsToFilePaths(fileGlobs);
 
-  const attachments = attachmentFilePaths.map((filePath) => {
-    const fileContents = fs.readFileSync(filePath);
-    const fileName = path.basename(filePath);
-    return { name: fileName, contents: fileContents };
+  return filePaths.map((filePath) => {
+    const contents = fs.readFileSync(filePath);
+    const name = path.basename(filePath);
+    return { name, contents };
   });
-
-  return attachments;
 };
 
-const sendResults = async (serverUrl, publishToken, resultsBlob) => {
+const sendResults = async (
+  serverUrl,
+  publishToken,
+  resultsBlob,
+  gitRepoName,
+  gitBranchName,
+  projectName
+) => {
   const headers = {};
 
   if (publishToken) {
@@ -1009,7 +1014,27 @@ const sendResults = async (serverUrl, publishToken, resultsBlob) => {
     headers,
   });
 
-  const resp = await axiosInstance.post(`${serverUrl}/results`, resultsBlob);
+  const groupedResults = {
+    groupedTestSuites: [
+      {
+        groupName: `${projectName || "Tests"}`,
+        testSuitesBlob: resultsBlob,
+      },
+    ],
+    metadata: {
+      git: {
+        repoName: gitRepoName,
+        branchName: gitBranchName,
+        isMainBranch: gitBranchName === "main" || gitBranchName === "master",
+        projectName,
+      },
+    },
+  };
+
+  const resp = await axiosInstance.post(
+    `${serverUrl}/groupedResults`,
+    groupedResults
+  );
 
   return resp.data;
 };
@@ -1039,6 +1064,30 @@ const sendAttachment = (
     .catch((err) => Promise.reject(err));
 };
 
+const sendCoverage = (
+  serverUrl,
+  publicId,
+  publishToken,
+  coverageFileContents
+) => {
+  const headers = {};
+
+  if (publishToken) {
+    headers["X-PROJEKTOR-TOKEN"] = publishToken;
+  }
+
+  const axiosInstance = axios.create({
+    headers,
+  });
+
+  const postUrl = `${serverUrl}/run/${publicId}/coverage`;
+
+  return axiosInstance
+    .post(postUrl, coverageFileContents)
+    .then((resp) => Promise.resolve(resp.data))
+    .catch((err) => Promise.reject(err));
+};
+
 const collectAndSendAttachments = (
   serverUrl,
   publishToken,
@@ -1046,7 +1095,7 @@ const collectAndSendAttachments = (
   publicId
 ) => {
   if (attachmentFileGlobs && attachmentFileGlobs.length > 0) {
-    const attachments = collectAttachments(attachmentFileGlobs);
+    const attachments = collectFileContents(attachmentFileGlobs);
     const attachmentsCount = attachments.length;
 
     if (attachmentsCount) {
@@ -1074,11 +1123,49 @@ const collectAndSendAttachments = (
   }
 };
 
+const collectAndSendCoverage = (
+  serverUrl,
+  publishToken,
+  coverageFileGlobs,
+  publicId
+) => {
+  if (coverageFileGlobs && coverageFileGlobs.length > 0) {
+    const coverageFiles = collectFileContents(coverageFileGlobs);
+    const coverageCount = coverageFiles.length;
+
+    if (coverageCount) {
+      console.log(
+        `Sending ${coverageCount} coverage result(s) to Projektor server`
+      );
+      coverageFiles.forEach((coverageFile) =>
+        sendCoverage(
+          serverUrl,
+          publicId,
+          publishToken,
+          coverageFile.contents
+        ).catch((e) => {
+          console.error(
+            `Error sending coverage result ${coverageFile} to Projektor server ${serverUrl}`,
+            e.message
+          );
+        })
+      );
+      console.log(
+        `Finished sending coverage ${coverageCount} results to Projektor`
+      );
+    }
+  }
+};
+
 const collectAndSendResults = async (
   serverUrl,
   publishToken,
   resultsFileGlobs,
-  attachmentFileGlobs
+  attachmentFileGlobs,
+  coverageFileGlobs,
+  gitRepoName,
+  gitBranchName,
+  projectName
 ) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
@@ -1091,7 +1178,10 @@ const collectAndSendResults = async (
       const resultsResponseData = await sendResults(
         serverUrl,
         publishToken,
-        resultsBlob
+        resultsBlob,
+        gitRepoName,
+        gitBranchName,
+        projectName
       );
 
       const publicId = resultsResponseData.id;
@@ -1102,6 +1192,13 @@ const collectAndSendResults = async (
         serverUrl,
         publishToken,
         attachmentFileGlobs,
+        publicId
+      );
+
+      await collectAndSendCoverage(
+        serverUrl,
+        publishToken,
+        coverageFileGlobs,
         publicId
       );
 
@@ -6509,10 +6606,12 @@ const collectAndPublishResults = async ({
   serverUrl,
   resultsInput,
   attachmentsInput,
+  coverageInput,
   token,
 }) => {
   const results = resultsInput ? resultsInput.split(/\r?\n/) : null;
   const attachments = attachmentsInput ? attachmentsInput.split(/\r?\n/) : null;
+  const coverage = coverageInput ? coverageInput.split(/\r?\n/) : null;
 
   const args = {};
 
@@ -6532,6 +6631,10 @@ const collectAndPublishResults = async ({
     args.attachments = attachments;
   }
 
+  if (coverage) {
+    args.coverage = coverage;
+  }
+
   const { reportUrl } = await run(args, token, "projektor.json");
 
   return { reportUrl };
@@ -6549,6 +6652,7 @@ const executeAction = () => {
       const serverUrl = core.getInput("server-url");
       const resultsInput = core.getInput("results");
       const attachmentsInput = core.getInput("attachments");
+      const coverageInput = core.getInput("coverage");
       const token = core.getInput("token");
 
       const { reportUrl } = collectAndPublishResults({
@@ -6556,6 +6660,7 @@ const executeAction = () => {
         serverUrl,
         resultsInput,
         attachmentsInput,
+        coverageInput,
         token,
       });
 
@@ -6628,6 +6733,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   let serverUrl;
   let resultsFileGlobs;
   let attachmentFileGlobs;
+  let coverageFileGlobs;
   let exitWithFailure;
   let writeSlackMessageFile;
   let slackMessageFileName;
@@ -6636,12 +6742,13 @@ async function run(args, publishToken, defaultConfigFilePath) {
   const configFilePath = args.configFile || defaultConfigFilePath;
 
   if (fs.existsSync(configFilePath)) {
-    const configFileContents = fs.readFileSync(configFilePath);
+    const configFileContents = fs.readFileSync(configFilePath).toString();
     const config = JSON.parse(configFileContents);
 
     serverUrl = config.serverUrl;
     resultsFileGlobs = config.results;
     attachmentFileGlobs = config.attachments;
+    coverageFileGlobs = config.coverage;
     exitWithFailure = config.exitWithFailure;
     writeSlackMessageFile = config.writeSlackMessageFile;
     slackMessageFileName = config.slackMessageFileName;
@@ -6655,6 +6762,11 @@ async function run(args, publishToken, defaultConfigFilePath) {
         ? args.attachments
         : [args.attachments];
     }
+    if (args.coverage) {
+      coverageFileGlobs = Array.isArray(args.coverage)
+        ? args.coverage
+        : [args.coverage];
+    }
     exitWithFailure = args.exitWithFailure;
     writeSlackMessageFile = args.writeSlackMessageFile;
     slackMessageFileName = args.slackMessageFileName;
@@ -6662,11 +6774,20 @@ async function run(args, publishToken, defaultConfigFilePath) {
   }
 
   if (resultsFileGlobs) {
+    const isCI = process.env.CI && process.env.CI !== "false";
+    const gitRepoName =
+      process.env.VELA_REPO_FULL_NAME || process.env.GITHUB_REPOSITORY;
+    const gitBranchName = findGitBranchName();
+
     const { resultsBlob, reportUrl, publicId } = await collectAndSendResults(
       serverUrl,
       publishToken,
       resultsFileGlobs,
-      attachmentFileGlobs
+      attachmentFileGlobs,
+      coverageFileGlobs,
+      gitRepoName,
+      gitBranchName,
+      projectName
     );
 
     if (!resultsBlob) {
@@ -6675,8 +6796,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
       );
     }
 
-    const writeResultsFile = process.env.CI && process.env.CI !== "false";
-    if (writeResultsFile) {
+    if (isCI) {
       writeResultsFileToDisk(publicId, reportUrl, "projektor_report.json");
     }
 
@@ -6728,6 +6848,14 @@ function printLinkFromFile(resultsFileName) {
 
 function containsTestFailure(resultsBlob) {
   return resultsBlob.indexOf("<failure") != -1;
+}
+
+function findGitBranchName() {
+  const gitRef = process.env.VELA_BUILD_REF || process.env.GITHUB_REF;
+  const gitBranchParts = gitRef ? gitRef.split("/") : [];
+
+  // refs/head/branch-name
+  return gitBranchParts.length === 3 ? gitBranchParts[2] : null;
 }
 
 module.exports = {
