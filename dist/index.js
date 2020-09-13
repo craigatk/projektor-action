@@ -6640,7 +6640,7 @@ const collectAndPublishResults = async ({
   return { reportUrl };
 };
 
-const executeAction = () => {
+const executeAction = async () => {
   try {
     const printLink = core.getInput("print-link");
 
@@ -6655,7 +6655,7 @@ const executeAction = () => {
       const coverageInput = core.getInput("coverage");
       const token = core.getInput("token");
 
-      const { reportUrl } = collectAndPublishResults({
+      const { reportUrl } = await collectAndPublishResults({
         configFilePath,
         serverUrl,
         resultsInput,
