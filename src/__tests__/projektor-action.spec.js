@@ -85,4 +85,32 @@ describe("Projektor action", () => {
 
     expect(printLinkFromFile).not.toHaveBeenCalled();
   });
+
+  it("should send coverage to server", () => {
+    core.getInput.mockImplementation((inputName) => {
+      if (inputName === "print-link") {
+        return null;
+      } else if (inputName === "server-url") {
+        return "http://localhost:8080";
+      } else if (inputName === "results") {
+        return "test-results-1/*.xml\r\ntest-results-2/*.xml";
+      } else if (inputName === "coverage") {
+        return "coverageDir/*.xml";
+      } else {
+        return null;
+      }
+    });
+
+    executeAction();
+
+    expect(run).toHaveBeenCalledWith(
+      expect.objectContaining({
+        serverUrl: "http://localhost:8080",
+        resultsFileGlobs: ["test-results-1/*.xml", "test-results-2/*.xml"],
+        coverage: ["coverageDir/*.xml"],
+      }),
+      null,
+      "projektor.json"
+    );
+  });
 });
