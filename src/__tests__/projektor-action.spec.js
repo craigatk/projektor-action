@@ -113,4 +113,53 @@ describe("Projektor action", () => {
       "projektor.json"
     );
   });
+
+  it("should set action output", async () => {
+    core.getInput.mockImplementation((inputName) => {
+      if (inputName === "config-file") {
+        return "projektor-config.json";
+      } else {
+        return null;
+      }
+    });
+
+    run.mockImplementation(async (_) => {
+      return { reportUrl: "http://localhost:8080/tests/12345" };
+    });
+
+    await executeAction();
+
+    expect(core.setOutput).toHaveBeenCalledWith(
+      "report-url",
+      "http://localhost:8080/tests/12345"
+    );
+  });
+
+  it("should pass config file to run", () => {
+    core.getInput.mockImplementation((inputName) => {
+      if (inputName === "config-file") {
+        return "projektor-config.json";
+      } else {
+        return null;
+      }
+    });
+
+    executeAction();
+
+    expect(run).toHaveBeenCalledWith(
+      expect.objectContaining({
+        configFile: "projektor-config.json",
+      }),
+      null,
+      "projektor.json"
+    );
+  });
+
+  it("should set failed when error happens", () => {
+    core.getInput.mockImplementation((inputName) => {
+      throw new Error();
+    });
+
+    executeAction();
+  });
 });
