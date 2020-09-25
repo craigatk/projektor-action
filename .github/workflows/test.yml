@@ -19,7 +19,7 @@ jobs:
           npm run-script test
 
       - name: Projektor publish
-        uses: craigatk/projektor-action@v9
+        uses: craigatk/projektor-action@v10
         with:
           server-url: https://projektorlive.herokuapp.com
           results: test-results/*.xml
