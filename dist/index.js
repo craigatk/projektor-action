@@ -1002,7 +1002,8 @@ const sendResults = async (
   resultsBlob,
   gitRepoName,
   gitBranchName,
-  projectName
+  projectName,
+  isCI
 ) => {
   const headers = {};
 
@@ -1028,6 +1029,7 @@ const sendResults = async (
         isMainBranch: gitBranchName === "main" || gitBranchName === "master",
         projectName,
       },
+      ci: isCI,
     },
   };
 
@@ -1165,7 +1167,8 @@ const collectAndSendResults = async (
   coverageFileGlobs,
   gitRepoName,
   gitBranchName,
-  projectName
+  projectName,
+  isCI
 ) => {
   console.log(
     `Gathering results from ${resultsFileGlobs} to send to Projektor server ${serverUrl}`
@@ -1181,7 +1184,8 @@ const collectAndSendResults = async (
         resultsBlob,
         gitRepoName,
         gitBranchName,
-        projectName
+        projectName,
+        isCI
       );
 
       const publicId = resultsResponseData.id;
@@ -6774,7 +6778,7 @@ async function run(args, publishToken, defaultConfigFilePath) {
   }
 
   if (resultsFileGlobs) {
-    const isCI = process.env.CI && process.env.CI !== "false";
+    const isCI = Boolean(process.env.CI) && process.env.CI !== "false";
     const gitRepoName =
       process.env.VELA_REPO_FULL_NAME || process.env.GITHUB_REPOSITORY;
     const gitBranchName = findGitBranchName();
@@ -6787,7 +6791,8 @@ async function run(args, publishToken, defaultConfigFilePath) {
       coverageFileGlobs,
       gitRepoName,
       gitBranchName,
-      projectName
+      projectName,
+      isCI
     );
 
     if (!resultsBlob) {
