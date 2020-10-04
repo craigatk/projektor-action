@@ -21,7 +21,7 @@ https://projektorlive.herokuapp.com/tests/KONCH3QEONFY/
 For detailed list of all parameters that can be specified in the Projektor config file, please see https://projektor.dev/docs/node-script/
 
 ```
-uses: craigatk/projektor-action@v3
+uses: craigatk/projektor-action@v11
 with:
   config-file: projektor.json
 ```
@@ -29,7 +29,7 @@ with:
 ### Specifying individual parameters
 
 ```
-uses: craigatk/projektor-action@v3
+uses: craigatk/projektor-action@v11
 with:
   server-url: <Projektor-server-url>
   results: test-results/*.xml
