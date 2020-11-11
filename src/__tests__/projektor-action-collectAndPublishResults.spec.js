@@ -179,4 +179,34 @@ describe("publishing results to server", () => {
       expect(requestUrls).toContain("/run/12345/coverage");
     });
   });
+
+  it("should publish coverage only from one directory", async () => {
+    expectResultsPost("12345");
+
+    const performanceInput = "src/__tests__/performanceResults/*.json";
+    const serverUrl = "http://localhost:9002";
+
+    await collectAndPublishResults({
+      performanceInput,
+      serverUrl,
+      compressionEnabled: false,
+    });
+
+    const requests = server.requests();
+
+    expect(requests.length).toBe(1);
+
+    const requestBody = requests[0].body;
+    expect(requestBody.performanceResults.length).toBe(2);
+
+    const file1 = requestBody.performanceResults.find(
+      (file) => file.name === "perf-test-1.json"
+    );
+    expect(file1.resultsBlob).toContain("perf-test-1-body");
+
+    const file2 = requestBody.performanceResults.find(
+      (file) => file.name === "perf-test-2.json"
+    );
+    expect(file2.resultsBlob).toContain("perf-test-2-body");
+  });
 });

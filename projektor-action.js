@@ -7,11 +7,14 @@ const collectAndPublishResults = async ({
   resultsInput,
   attachmentsInput,
   coverageInput,
+  performanceInput,
   token,
+  compressionEnabled,
 }) => {
   const results = resultsInput ? resultsInput.split(/\r?\n/) : null;
   const attachments = attachmentsInput ? attachmentsInput.split(/\r?\n/) : null;
   const coverage = coverageInput ? coverageInput.split(/\r?\n/) : null;
+  const performance = performanceInput ? performanceInput.split(/\r?\n/) : null;
 
   const args = {};
 
@@ -35,6 +38,12 @@ const collectAndPublishResults = async ({
     args.coverage = coverage;
   }
 
+  if (performance) {
+    args.performance = performance;
+  }
+
+  args.compressionEnabled = compressionEnabled;
+
   const { reportUrl } = await run(args, token, "projektor.json");
 
   return { reportUrl };
@@ -53,7 +62,10 @@ const executeAction = async () => {
       const resultsInput = core.getInput("results");
       const attachmentsInput = core.getInput("attachments");
       const coverageInput = core.getInput("coverage");
+      const performanceInput = core.getInput("performance");
       const token = core.getInput("token");
+      const compressionEnabled =
+        core.getInput("compression-enabled") !== "false";
 
       const { reportUrl } = await collectAndPublishResults({
         configFilePath,
@@ -61,7 +73,9 @@ const executeAction = async () => {
         resultsInput,
         attachmentsInput,
         coverageInput,
+        performanceInput,
         token,
+        compressionEnabled,
       });
 
       core.setOutput("report-url", reportUrl);

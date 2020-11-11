@@ -17,6 +17,12 @@ inputs:
   coverage:
     description: 'Paths to test coverage files to include in test report'
     required: false
+  performance:
+    description: 'Paths to performance test files to include in test report'
+    required: false
+  compression-enabled:
+    description: 'Whether to enable compressing results when sending them to server to improve performance'
+    required: false
   token:
     description: 'Token for publishing results to Projektor server if server has token enabled'
     required: false
