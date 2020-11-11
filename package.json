@@ -1,6 +1,6 @@
 {
   "name": "projektor-github-action",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "GitHub action for publishing test results to Projektor",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "dependencies": {
     "@actions/core": "1.2.6",
     "@actions/github": "2.2.0",
-    "projektor-publish": "2.8.0"
+    "projektor-publish": "2.10.0"
   },
   "devDependencies": {
     "@zeit/ncc": "0.22.3",
