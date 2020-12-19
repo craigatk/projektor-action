@@ -162,4 +162,32 @@ describe("Projektor action", () => {
 
     executeAction();
   });
+
+  it("should pass project name when set", () => {
+    core.getInput.mockImplementation((inputName) => {
+      if (inputName === "print-link") {
+        return null;
+      } else if (inputName === "server-url") {
+        return "http://localhost:8080";
+      } else if (inputName === "results") {
+        return "test-results-1/*.xml\r\ntest-results-2/*.xml";
+      } else if (inputName === "project-name") {
+        return "my-project";
+      } else {
+        return null;
+      }
+    });
+
+    executeAction();
+
+    expect(run).toHaveBeenCalledWith(
+      expect.objectContaining({
+        serverUrl: "http://localhost:8080",
+        resultsFileGlobs: ["test-results-1/*.xml", "test-results-2/*.xml"],
+        projectName: "my-project",
+      }),
+      null,
+      "projektor.json"
+    );
+  });
 });

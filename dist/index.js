@@ -23898,6 +23898,7 @@ const collectAndPublishResults = async ({
   performanceInput,
   token,
   compressionEnabled,
+  projectName,
 }) => {
   const results = resultsInput ? resultsInput.split(/\r?\n/) : null;
   const attachments = attachmentsInput ? attachmentsInput.split(/\r?\n/) : null;
@@ -23930,6 +23931,10 @@ const collectAndPublishResults = async ({
     args.performance = performance;
   }
 
+  if (projectName) {
+    args.projectName = projectName;
+  }
+
   args.compressionEnabled = compressionEnabled;
 
   const { reportUrl } = await run(args, token, "projektor.json");
@@ -23954,6 +23959,7 @@ const executeAction = async () => {
       const token = core.getInput("token");
       const compressionEnabled =
         core.getInput("compression-enabled") !== "false";
+      const projectName = core.getInput("project-name");
 
       const { reportUrl } = await collectAndPublishResults({
         configFilePath,
@@ -23964,6 +23970,7 @@ const executeAction = async () => {
         performanceInput,
         token,
         compressionEnabled,
+        projectName,
       });
 
       core.setOutput("report-url", reportUrl);

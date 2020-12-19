@@ -1,6 +1,6 @@
 {
   "name": "projektor-github-action",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "GitHub action for publishing test results to Projektor",
   "main": "index.js",
   "scripts": {
