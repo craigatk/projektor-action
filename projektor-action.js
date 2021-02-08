@@ -49,7 +49,7 @@ const collectAndPublishResults = async ({
 
   args.compressionEnabled = compressionEnabled;
 
-  const { reportUrl } = await run(args, token, "projektor.json");
+  const { reportUrl } = await run(args, process.env, token, "projektor.json");
 
   return { reportUrl };
 };

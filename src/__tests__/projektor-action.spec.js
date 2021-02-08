@@ -50,6 +50,7 @@ describe("Projektor action", () => {
         serverUrl: "http://localhost:8080",
         resultsFileGlobs: ["test-results/*.xml"],
       }),
+      process.env,
       null,
       "projektor.json"
     );
@@ -79,6 +80,7 @@ describe("Projektor action", () => {
         serverUrl: "http://localhost:8080",
         resultsFileGlobs: ["test-results-1/*.xml", "test-results-2/*.xml"],
       }),
+      process.env,
       "my-token",
       "projektor.json"
     );
@@ -109,6 +111,7 @@ describe("Projektor action", () => {
         resultsFileGlobs: ["test-results-1/*.xml", "test-results-2/*.xml"],
         coverage: ["coverageDir/*.xml"],
       }),
+      process.env,
       null,
       "projektor.json"
     );
@@ -150,6 +153,7 @@ describe("Projektor action", () => {
       expect.objectContaining({
         configFile: "projektor-config.json",
       }),
+      process.env,
       null,
       "projektor.json"
     );
@@ -186,6 +190,7 @@ describe("Projektor action", () => {
         resultsFileGlobs: ["test-results-1/*.xml", "test-results-2/*.xml"],
         projectName: "my-project",
       }),
+      process.env,
       null,
       "projektor.json"
     );
