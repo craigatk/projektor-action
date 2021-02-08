@@ -166,17 +166,20 @@ describe("publishing results to server", () => {
       resultsInput,
       serverUrl,
       coverageInput,
+      compressionEnabled: false,
     });
 
     await waitForExpect(() => {
       const requests = server.requests();
 
-      expect(requests.length).toBe(2);
+      expect(requests.length).toBe(1);
 
       const requestUrls = requests.map((req) => req.url);
 
       expect(requestUrls).toContain("/groupedResults");
-      expect(requestUrls).toContain("/run/12345/coverage");
+
+      const requestBody = requests[0].body;
+      expect(requestBody.coverageFiles.length).toBe(1);
     });
   });
 

@@ -18,7 +18,7 @@
   "dependencies": {
     "@actions/core": "1.2.6",
     "@actions/github": "2.2.0",
-    "projektor-publish": "2.10.0"
+    "projektor-publish": "3.1.2"
   },
   "devDependencies": {
     "@zeit/ncc": "0.22.3",
