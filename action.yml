@@ -36,5 +36,5 @@ outputs:
   report-url:
     description: 'Link to Projektor test report'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
