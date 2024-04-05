@@ -203,12 +203,12 @@ describe("publishing results to server", () => {
     expect(requestBody.performanceResults.length).toBe(2);
 
     const file1 = requestBody.performanceResults.find(
-      (file) => file.name === "perf-test-1.json"
+      (file) => file.name === "perf-test-1.json",
     );
     expect(file1.resultsBlob).toContain("perf-test-1-body");
 
     const file2 = requestBody.performanceResults.find(
-      (file) => file.name === "perf-test-2.json"
+      (file) => file.name === "perf-test-2.json",
     );
     expect(file2.resultsBlob).toContain("perf-test-2-body");
   });

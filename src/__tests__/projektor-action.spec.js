@@ -52,7 +52,7 @@ describe("Projektor action", () => {
       }),
       process.env,
       null,
-      "projektor.json"
+      "projektor.json",
     );
 
     expect(printLinkFromFile).not.toHaveBeenCalled();
@@ -82,7 +82,7 @@ describe("Projektor action", () => {
       }),
       process.env,
       "my-token",
-      "projektor.json"
+      "projektor.json",
     );
 
     expect(printLinkFromFile).not.toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe("Projektor action", () => {
       }),
       process.env,
       null,
-      "projektor.json"
+      "projektor.json",
     );
   });
 
@@ -134,7 +134,7 @@ describe("Projektor action", () => {
 
     expect(core.setOutput).toHaveBeenCalledWith(
       "report-url",
-      "http://localhost:8080/tests/12345"
+      "http://localhost:8080/tests/12345",
     );
   });
 
@@ -155,7 +155,7 @@ describe("Projektor action", () => {
       }),
       process.env,
       null,
-      "projektor.json"
+      "projektor.json",
     );
   });
 
@@ -192,7 +192,7 @@ describe("Projektor action", () => {
       }),
       process.env,
       null,
-      "projektor.json"
+      "projektor.json",
     );
   });
 });
