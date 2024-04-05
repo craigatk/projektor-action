@@ -35,3 +35,5 @@ with:
   results: test-results/*.xml
   coverage: coverage/*.xml
 ```
+
+For a full list of available parameters, please see [action.yml](action.yml)

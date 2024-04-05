@@ -34,10 +34,13 @@
       "default",
       "jest-junit"
     ],
-    "collectCoverage": true
+    "collectCoverage": true,
+    "coverageReporters": ["clover", "text"]
   },
   "jest-junit": {
     "outputDirectory": "test-results",
-    "includeConsoleOutput": "true"
+    "includeConsoleOutput": "true",
+    "classNameTemplate": "{classname}",
+    "usePathForSuiteName": "true"
   }
 }
