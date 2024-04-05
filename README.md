@@ -28,6 +28,8 @@ with:
 
 ### Specifying individual parameters
 
+You can also specify individual parameters with GitHub action parameters:
+
 ```
 uses: craigatk/projektor-action@v15
 with:
