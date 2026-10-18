@@ -44,5 +44,10 @@
     "includeConsoleOutput": "true",
     "classNameTemplate": "{classname}",
     "usePathForSuiteName": "true"
+  },
+  "overrides": {
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "4.3.2"
+    }
   }
 }
