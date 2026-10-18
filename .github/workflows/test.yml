@@ -21,7 +21,7 @@ jobs:
       - name: Projektor publish
         uses: craigatk/projektor-action@v16.0.0
         with:
-          server-url: https://live.projektor.com
+          server-url: https://live.projektor.dev
           results: test-results/*.xml
           coverage: coverage/*.xml
           token: ${{ secrets.PROJEKTOR_TOKEN }}
