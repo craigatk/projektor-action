@@ -11,7 +11,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22
 
       - name: test
         run: |
@@ -19,9 +19,9 @@ jobs:
           npm run-script test
 
       - name: Projektor publish
-        uses: craigatk/projektor-action@v15.0.1
+        uses: craigatk/projektor-action@v16.0.0
         with:
-          server-url: https://projektorlive.herokuapp.com
+          server-url: https://live.projektor.dev
           results: test-results/*.xml
           coverage: coverage/*.xml
           token: ${{ secrets.PROJEKTOR_TOKEN }}
