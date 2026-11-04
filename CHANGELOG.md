@@ -1,5 +1,10 @@
 # Changelog
 
+## v16.0.1 - 2026-11-04
+
+- Update `projektor-publish` to 3.13.16
+- Resolve security vulnerabilities in production dependencies, including `undici` and `follow-redirects`
+
 ## v16.0.0 - 2026-10-18
 
 - Action now runs on Node 24 (was Node 16)
